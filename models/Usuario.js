@@ -73,6 +73,10 @@ const UsuarioSchema = Schema({
     riesgoUsuario:{
         type: Number,
     },
+    tipoRiesgo:{
+        type: Schema.Types.ObjectId,
+        ref: 'riesgo',
+    }
 
 });
 
