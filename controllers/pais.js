@@ -16,7 +16,7 @@ const crearPais = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-            msg: 'Erro al crear el pais',
+            msg: 'Error al crear el pais',
         })
     }
 }
