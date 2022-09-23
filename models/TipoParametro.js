@@ -1,10 +1,10 @@
 const { Schema, model } = require('mongoose');
 
-const SintomaSchema = Schema({
+const TipoParametroSchema = Schema({
     nombre:{
         type: String,
         required: true
     }
 });
 
-module.exports = model('Sintomas', SintomaSchema)
+module.exports = model('ripoParametro', TipoParametroSchema)

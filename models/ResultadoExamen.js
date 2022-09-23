@@ -6,9 +6,10 @@ const ResultExamSchema = Schema({
         ref: 'usuario',
         required: true,
     },
-    nombreExamen:{
-        type: String,
-        required: true
+    idTipoExamen:{
+        type: Schema.Types.ObjectId,
+        ref: 'tipoExamen',
+        required: true,
     },
     resultadoExamen:{
         type: String,

@@ -35,13 +35,12 @@ const UsuarioSchema = Schema({
         type: Number,
         required: true
     },
-    peso:{
+    altura:{
         type: Number,
         required: true
     },
     imc:{
         type: Number,
-        required: true
     },
     email: {
         type: String,
@@ -52,7 +51,7 @@ const UsuarioSchema = Schema({
         type: String,
         required: true
     },
-    anteceFamiliares:[{
+    antecedentesFamiliares:[{
         enfermedad:{
             type: Schema.Types.ObjectId,
             ref: 'enfermedad',
@@ -68,6 +67,12 @@ const UsuarioSchema = Schema({
         habito:{
             type: Schema.Types.ObjectId,
             ref: 'habito',
+        }
+    }],
+    resultadosExamenes:[{
+        resultadoExamen:{
+            type: Schema.Types.ObjectId,
+            ref: 'resultadoExamen',
         }
     }],
     riesgoUsuario:{

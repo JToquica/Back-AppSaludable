@@ -1,6 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const EnfermedadSchema = Schema({
+    idTipoParametro:{
+        type: Schema.Types.ObjectId,
+        ref: 'tipoParametro',
+        required: true
+    },
     nombre:{
         type: String,
         required: true
@@ -9,8 +14,6 @@ const EnfermedadSchema = Schema({
         type: Number,
         required: true
     }
-},{
-    collection: 'enfermedades'
 });
 
-module.exports = model('enfermedad', EnfermedadSchema)
+module.exports = model('parametro', EnfermedadSchema)
