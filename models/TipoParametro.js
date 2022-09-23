@@ -7,4 +7,4 @@ const TipoParametroSchema = Schema({
     }
 });
 
-module.exports = model('ripoParametro', TipoParametroSchema)
+module.exports = model('tipoParametro', TipoParametroSchema)
