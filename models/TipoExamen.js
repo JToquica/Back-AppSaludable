@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const { Schema } = require('./Usuario');
 
 const TipoExamenSchema = Schema({
     nombre:{
