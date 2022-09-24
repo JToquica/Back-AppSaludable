@@ -11,6 +11,7 @@ dbConnection();
 app.use(express.json());
 
 app.use('/api/usuario',require('./Routes/usuario'))
+app.use('/api/rol',require('./Routes/rol'))
 app.use('/api/pais',require('./Routes/pais'))
 app.use('/api/resultado',require('./Routes/resultadoExamen'))
 app.use('/api/tipoExamen',require('./Routes/tipoExamen'))

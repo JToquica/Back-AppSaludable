@@ -47,7 +47,7 @@ const UsuarioSchema = Schema({
         required: true,
         unique: true
     },
-    contrasenia:{
+    password:{
         type: String,
         required: true
     },
@@ -81,7 +81,13 @@ const UsuarioSchema = Schema({
     tipoRiesgo:{
         type: Schema.Types.ObjectId,
         ref: 'riesgo',
-    }
+    },
+    rol:{
+        type: Schema.Types.ObjectId,
+        ref: 'rol',
+        required: true,
+        default: '632f2dd26f8c814317209cb6'
+    },
 
 });
 
