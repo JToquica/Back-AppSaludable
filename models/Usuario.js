@@ -54,19 +54,19 @@ const UsuarioSchema = Schema({
     antecedentesFamiliares:[{
         enfermedad:{
             type: Schema.Types.ObjectId,
-            ref: 'enfermedad',
+            ref: 'parametro',
         }
     }],
     enfermedadesUsuario:[{
         enfermedad:{
             type: Schema.Types.ObjectId,
-            ref: 'enfermedad',
+            ref: 'parametro',
         }
     }],
     habitosVida:[{
         habito:{
             type: Schema.Types.ObjectId,
-            ref: 'habito',
+            ref: 'parametro',
         }
     }],
     resultadosExamenes:[{
