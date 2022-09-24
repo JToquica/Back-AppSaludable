@@ -4,7 +4,7 @@ const Parametro = require('../models/Parametro');
 
 const obtenerParametros = async (req, resp = response) => {
     try {
-        const parametros = await Parametro.find();
+        const parametros = await Parametro.find().populate('idTipoParametro');
         resp.status(200).json({
             ok: true,
             msg: 'Lista de parametros',
