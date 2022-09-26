@@ -61,7 +61,6 @@ const loginUsuario = async (req, resp = response) => {
     try {
         const { email, password } = req.body;
 
-        //confirmar email
         let usuario = await Usuario.findOne({ email }).populate('rol');
 
         if (!usuario){

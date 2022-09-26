@@ -26,7 +26,6 @@ const validarJWT = async (req = request, res = response, next) => {
         //Leer el usuario que corresponde al uid
         const usuario = await Usuario.findById(uid);
 
-        //Buscar si existe odontólogo y si existe mirar si está activo
         if(usuario) {
             req.usuario = usuario;
 

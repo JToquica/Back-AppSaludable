@@ -10,34 +10,27 @@ const UsuarioSchema = Schema({
         required: true
     },
     edad:{
-        type: Number,
-        required: true
+        type: Number
     },
     sexo:{
-        type: String,
-        required: true
+        type: String
     },
     fechaNacimiento:{
-        type: Date,
-        required: true
+        type: Date
     },
     paisResidencia:{
         type: Schema.Types.ObjectId,
-        ref: 'pais',
-        required: true
+        ref: 'pais'
     },
     paisOrigen:{
         type: Schema.Types.ObjectId,
-        ref: 'pais',
-        required: true
+        ref: 'pais'
     },
     peso:{
-        type: Number,
-        required: true
+        type: Number
     },
     altura:{
         type: Number,
-        required: true
     },
     imc:{
         type: Number,
