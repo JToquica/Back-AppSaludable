@@ -100,8 +100,66 @@ const loginUsuario = async (req, resp = response) => {
     }
 }
 
+const actualizarUsuario = async (req, resp = response) => {
+
+    const usuarioId = req.params.id;
+
+    try {
+        
+        const usuario = await Usuario.findById(usuarioId);
+
+        if(!usuario) {
+            return resp.status(201).json({
+                ok: false,
+                msg: 'El id no corresponde a un ningun usuario',
+            });
+        }
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, req.body, {new: true});
+
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Usuario actualizado',
+            usuario: usuarioActualizado
+        });
+        
+    } catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Error al actualizar usuario',
+        });
+    }
+}
+
+const actualizarPassword = async (req, resp = response) => {
+    const {password} = req.body;
+    const usuarioAutenticado = req.usuario;
+    try {
+        //Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        usuarioAutenticado.password = bcrypt.hashSync(password, salt);
+
+        await Usuario.findByIdAndUpdate(usuarioAutenticado.id, usuarioAutenticado, { new: true });
+
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Contraseña actualizada de manera exitosa',
+        });
+
+    } catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Error al actualizar la contraseña',
+        });
+    }
+}
+
+
 module.exports = {
     getUsuarioById,
     crearUsuario,
-    loginUsuario
+    loginUsuario,
+    actualizarUsuario,
+    actualizarPassword
 }

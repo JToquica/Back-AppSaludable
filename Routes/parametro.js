@@ -3,6 +3,8 @@ const { Router } = require('express');
 const router = Router();
 
 const { validarCampos } = require('../middlewares/validar-campos');
+const { AdminRole } = require('../middlewares/validar-roles');
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 const { obtenerParametros, crearParametro} = require('../controllers/parametro');
 
@@ -15,6 +17,8 @@ router.post('/create',
         check('valorRiesgo','El valor del riesgo es oligatorio').not().isEmpty(),
     ],
     validarCampos,
+    validarJWT,
+    AdminRole,
     crearParametro
 );
 

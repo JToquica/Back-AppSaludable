@@ -14,7 +14,7 @@ const obtenerTipoRecomendacion = async (req, resp = response) => {
         console.log(error);
         resp.status(500).json({
             ok: false,
-        msg: 'Error al listar los tipos de recomendaciones',
+            msg: 'Error al listar los tipos de recomendaciones',
         })
     }
 }

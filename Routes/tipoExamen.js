@@ -3,6 +3,8 @@ const { check } = require('express-validator');
 const router = Router();
 
 const { validarCampos } = require('../middlewares/validar-campos');
+const { AdminRole } = require('../middlewares/validar-roles');
+const { validarJWT } = require('../middlewares/validar-jwt');
 
 const { obtenerTiposExamenes, crearTipoExamen } = require('../controllers/tipoExamen');
 
@@ -16,6 +18,8 @@ router.post('/create',
         check('rangoMalo','El rango malo del examen es obligatorio').not().isEmpty(),
     ],
     validarCampos,
+    validarJWT,
+    AdminRole,
     crearTipoExamen
 );
 
