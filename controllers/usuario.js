@@ -28,7 +28,7 @@ const crearUsuario = async (req, resp = response) => {
 
         let usuario = await Usuario.findOne({ email});
         if(usuario){
-            return resp.status(200).json({
+            return resp.status(201).json({
                 ok: false,
                 msg: 'Ya existe un usuario registrado con ese email'
             })
@@ -41,7 +41,7 @@ const crearUsuario = async (req, resp = response) => {
 
         await usuario.save();
 
-        return resp.status(201).json({
+        return resp.status(200).json({
             ok: true,
             msg: 'Registro de usuario exitoso',
             uid: usuario.id,
