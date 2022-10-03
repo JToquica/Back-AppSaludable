@@ -38,7 +38,36 @@ const crearParametro = async (req, resp = response) => {
     }
 }
 
+const actulizarParametro = async (req, resp = response) => {
+    const parametroId = req.params.id;
+
+    try {
+        const parametro = await Parametro.findById(parametroId);
+
+        if(!parametro){
+            return resp.status(201).json({
+                ok: false,
+                msg: 'El id no corresponde a un ningun parametro',
+            });
+        }
+        const parametroActualizado = await Parametro.findByIdAndUpdate(parametroId, req.body, {new: true});
+
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Tipo parametro actualizado',
+            parametro: parametroActualizado
+        });
+    } catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Error al actualizar el parametro',
+        });
+    }
+}
+
 module.exports = {
     obtenerParametros,
-    crearParametro
+    crearParametro,
+    actulizarParametro
 }
