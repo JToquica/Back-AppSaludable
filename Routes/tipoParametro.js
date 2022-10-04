@@ -4,9 +4,10 @@ const router = Router();
 
 const { validarCampos } = require('../middlewares/validar-campos');
 
-const { obtenerTipoParametro, crearTipoParametro, actulizarTipoParametro } = require('../controllers/tipoParametro');
+const { obtenerTipoParametro, crearTipoParametro, actulizarTipoParametro, eliminarTipoParametro } = require('../controllers/tipoParametro');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { AdminRole } = require('../middlewares/validar-roles');
+const { eliminarTipoExamen } = require('../controllers/tipoExamen');
 
 router.get('/', obtenerTipoParametro);
 
@@ -29,5 +30,7 @@ router.put('/update/:id',
     AdminRole,
     actulizarTipoParametro
 );
+
+router.delete('/delete/:id', validarJWT, AdminRole, eliminarTipoParametro);
 
 module.exports = router;

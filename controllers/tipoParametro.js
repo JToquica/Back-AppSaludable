@@ -66,8 +66,36 @@ const actulizarTipoParametro = async (req, resp = response) => {
     }
 }
 
+const eliminarTipoParametro = async (req, resp = response) => {
+    const tipoParametroId = req.params.id;
+
+    try {
+        const tipoParametro = await TipoParametro.findById(tipoParametroId);
+
+        if(!tipoParametro){
+            resp.status(404).json({
+                ok: false,
+                msg: 'El id no corresponde a ningun tipo parametro',
+            });
+        }
+        await TipoParametro.findByIdAndDelete(tipoParametroId);
+
+        resp.status(201).json({
+            ok: true,
+            msg: 'Tipo parametro eliminado'
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: "Error al eliminar el tipo parametro"
+        });
+    }
+}
+
 module.exports = {
     obtenerTipoParametro,
     crearTipoParametro,
-    actulizarTipoParametro
+    actulizarTipoParametro,
+    eliminarTipoParametro
 }
