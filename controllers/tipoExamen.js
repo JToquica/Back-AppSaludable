@@ -8,7 +8,7 @@ const obtenerTiposExamenes = async (req, resp = response) => {
         resp.status(200).json({
             ok: true,
             msg: 'Lista de tipos de examenes',
-            TipoExamen
+            tipoExamen
         });
     } catch (error) {
         console.log(error);
@@ -38,7 +38,64 @@ const crearTipoExamen = async (req, resp = response) => {
     }
 }
 
+const actualizarTipoExamen = async (req, resp = response) => {
+    const tipoExamenId = req.params.id;
+
+    try {
+        const tipoExamen = await TipoExamen.findById(tipoExamenId);
+
+        if(!tipoExamen){
+            return resp.status(201).json({
+                ok: false,
+                msg: 'El id no corresponde a ningun tipo examen'
+            });
+        }
+        const tipoExmamenActualizado = await TipoExamen.findByIdAndUpdate(tipoExamenId, req.body, {new: true});
+
+        return resp.status(201).json({
+            ok: true,
+            msg: 'Tipo exmamen actualizado',
+            tipoExamen: tipoExmamenActualizado
+        });  
+    } catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Error al actualizar el tipo examen',
+        })
+    }
+}
+
+const eliminarTipoExamen = async (req, resp = response) => {
+    const tipoExamenId = req.params.id;
+
+    try {
+        const tipoExamen = await TipoExamen.findById(tipoExamenId);
+
+        if(!tipoExamen){
+            resp.status(404).json({
+                ok: false,
+                msg: 'El id no corresponde a ningun tipo examen',
+            });
+        }
+        await TipoExamen.findByIdAndDelete(tipoExamenId);
+
+        resp.status(201).json({
+            ok: true,
+            msg: 'Tipo examen eliminado'
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: "Error al eliminar el tipo examen"
+        });
+    }
+}
+
 module.exports = {
     obtenerTiposExamenes,
-    crearTipoExamen
+    crearTipoExamen,
+    actualizarTipoExamen,
+    eliminarTipoExamen
 }
