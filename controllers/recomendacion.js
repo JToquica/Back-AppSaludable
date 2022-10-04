@@ -2,6 +2,24 @@ const { response } = require('express');
 
 const Recomendacion = require('../models/Recomendacion');
 
+const obtenerRecomendacion = async (req, resp = response) => {
+    try {
+        const recomendacion = await Recomendacion.find().populate('idTipoRecomendacion')
+                                                        .populate('idParametro');
+        resp.status(201).json({
+            ok: true,
+            msg: 'Lista de recomendaciones',
+            recomendacion
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al lsitar recomendaciones'
+        })
+    }
+}
+
 const crearRecomendacion = async (req, resp = response) => {
     try {
         const recomendacion = new Recomendacion(req.body);
@@ -21,4 +39,37 @@ const crearRecomendacion = async (req, resp = response) => {
     }
 }
 
-module.exports = {crearRecomendacion}
+const actulizarRecomendacion = async (req, resp = response) => {
+    const recomendacionId = req.params.id;
+
+    try {
+        const recomendacion = await Recomendacion.findById(recomendacionId);
+
+        if(!recomendacion){
+            return resp.status(201).json({
+                ok: false,
+                msg: 'El id no corresponde a un ninguna recomendacion',
+            });
+        }
+        const recomendacionActualizado = await Recomendacion.findByIdAndUpdate(recomendacionId, req.body, {new: true});
+
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Recomendacion actualizado',
+            parametro: recomendacionActualizado
+        });
+    } catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Error al actualizar la recomendacion',
+        });
+    }
+}
+
+module.exports = {
+    obtenerRecomendacion,
+    crearRecomendacion,
+    actulizarRecomendacion
+
+}

@@ -3,6 +3,12 @@ const { Schema, model } = require('mongoose');
 const RecomendacionSchema = Schema({
     idTipoRecomendacion:{
         type: Schema.Types.ObjectId,
+        ref: 'tipoRecomendacion',
+        required: true
+    },
+    idParametro:{
+        type: Schema.Types.ObjectId,
+        ref: 'parametro',
         required: true
     },
     nombre:{
