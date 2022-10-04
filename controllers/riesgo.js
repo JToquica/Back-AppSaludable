@@ -38,7 +38,64 @@ const crearRiesgo = async (req, resp = response) => {
     }
 }
 
+const actualizarRiesgo = async (req, resp = response) => {
+    const riesgoId = req.params.id;
+
+    try {
+        const riesgo = await Riesgo.findById(riesgoId);
+
+        if(!riesgo){
+            return resp.status(201).json({
+                ok: false,
+                msg: 'El id no corresponde a ningun riesgo'
+            });
+        }
+        const riesgoActualizado = await Riesgo.findByIdAndUpdate(riesgoId, req.body, {new: true});
+
+        return resp.status(201).json({
+            ok: true,
+            msg: 'Riesgo actualizado',
+            riesgo: riesgoActualizado
+        });  
+    } catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Error al actualizar el riesgo',
+        })
+    }
+}
+
+const eliminarRiesgo = async (req, resp = response) => {
+    const riesgoId = req.params.id;
+
+    try {
+        const riesgo = await Riesgo.findById(riesgoId);
+
+        if(!riesgo){
+            resp.status(404).json({
+                ok: false,
+                msg: 'El id no corresponde a ningun riesgo',
+            });
+        }
+        await Riesgo.findByIdAndDelete(riesgoId);
+
+        resp.status(201).json({
+            ok: true,
+            msg: 'Riesgo eliminado'
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: "Error al eliminar el Riesgo"
+        });
+    }
+}
+
 module.exports = {
     obtenerRiesgos,
-    crearRiesgo
+    crearRiesgo,
+    actualizarRiesgo,
+    eliminarRiesgo
 }
