@@ -6,7 +6,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { AdminRole } = require('../middlewares/validar-roles');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
-const { obtenerTipoRecomendacion, crearTipoRecomendacion, actulizarTipoRecomendacion } = require('../controllers/tipoRecomendacion');
+const { obtenerTipoRecomendacion, crearTipoRecomendacion, actulizarTipoRecomendacion, eliminarTipoRecomendacion } = require('../controllers/tipoRecomendacion');
 
 router.get('/', validarJWT, obtenerTipoRecomendacion);
 
@@ -31,5 +31,7 @@ router.put(
     actulizarTipoRecomendacion
 
 );
+
+router.delete('/delete/:id', validarJWT, AdminRole,eliminarTipoRecomendacion);
 
 module.exports = router;

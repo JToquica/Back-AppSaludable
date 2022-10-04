@@ -67,8 +67,36 @@ const actulizarTipoRecomendacion = async (req, resp = response) => {
     }
 }
 
+const eliminarTipoRecomendacion = async (req, resp = response) => {
+    const tipoRecomendacionId = req.params.id;
+
+    try {
+        const tipoRecomendacion = await TipoRecomendacion.findById(tipoRecomendacionId);
+
+        if(!tipoRecomendacion){
+            resp.status(404).json({
+                ok: false,
+                msg: 'El id no corresponde a ningun tipo recomendacion',
+            });
+        }
+        await TipoRecomendacion.findByIdAndDelete(tipoRecomendacionId);
+
+        resp.status(201).json({
+            ok: true,
+            msg: 'Tipo recomendacion eliminada'
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: "Error al eliminar el tipo recomendacion"
+        });
+    }
+}
+
 module.exports = {
     obtenerTipoRecomendacion,
     crearTipoRecomendacion,
-    actulizarTipoRecomendacion
+    actulizarTipoRecomendacion,
+    eliminarTipoRecomendacion
 }
