@@ -3,7 +3,7 @@ const router = Router();
 const { check } = require('express-validator');
 
 
-const { getRol, crearRol, actualizarRol } = require('../controllers/rol');
+const { getRol, crearRol, actualizarRol, eliminarRol } = require('../controllers/rol');
 const { AdminRole } = require('../middlewares/validar-roles');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
@@ -32,5 +32,7 @@ router.put(
     validarJWT,
     AdminRole,
     actualizarRol);
+
+router.delete('/delete/:id', validarJWT, AdminRole, eliminarRol)
 
 module.exports = router;

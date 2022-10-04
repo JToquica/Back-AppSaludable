@@ -76,10 +76,36 @@ const actualizarRol = async (req, resp = response) => {
     }
 }
 
+const eliminarRol = async (req, resp = response) => {
+    const rolId = req.params.id;
 
+    try {
+        const rol = await Rol.findById(rolId);
+
+        if(!rol){
+            resp.status(404).json({
+                ok: false,
+                msg: 'El id no corresponde a ningun rol',
+            });
+        }
+        await Rol.findByIdAndDelete(rolId);
+
+        resp.status(201).json({
+            ok: true,
+            msg: 'Rol eliminado'
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: "Error al eliminar el rol"
+        });
+    }
+}
 
 module.exports = {
     getRol,
     crearRol,
-    actualizarRol
+    actualizarRol,
+    eliminarRol
 };
