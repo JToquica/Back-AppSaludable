@@ -5,7 +5,6 @@ const Rol = require('../models/Rol');
 
 const AdminRole = async (req, res = response, next) => {
 
-
     if (req.usuario) {
         const { nombre, rol } = req.usuario;
         const userRol = await Rol.findById(rol)
@@ -25,7 +24,6 @@ const AdminRole = async (req, res = response, next) => {
                 ok: false,
                 msg: 'Se quiere validar el rol sin validar el token'
             });
-
         }
     }
 }

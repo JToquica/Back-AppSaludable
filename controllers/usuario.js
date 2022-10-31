@@ -43,9 +43,8 @@ const crearUsuario = async (req, resp = response) => {
 
         return resp.status(200).json({
             ok: true,
-            msg: 'Registro de usuario exitoso',
-            uid: usuario.id,
-            name: usuario.name
+            usuario,
+            token
         });
     } catch (error) {
         console.log(error);
@@ -85,10 +84,7 @@ const loginUsuario = async (req, resp = response) => {
 
             return resp.json({
                 ok: true,
-                msg: 'Sesión Iniciada',
-                uid: usuario.id,
-                name: usuario.nombre,
-                rol: usuario.rol.nombre,
+                usuario,
                 token
             });
         }
@@ -155,11 +151,31 @@ const actualizarPassword = async (req, resp = response) => {
     }
 }
 
+const renewToken = async(req,res = response) => {
+
+    const usuario = await Usuario.findById(req.usuario.id).populate('rol');
+
+    if (!usuario) {
+        return res.status(404).json({
+            ok: false,
+            msg: "Usuario no encontrado"
+        });
+    }
+
+    const token = await generarJWT(usuario.id);
+
+    return res.status(200).json({
+        ok: true,
+        usuario,
+        token
+    })
+}
 
 module.exports = {
     getUsuarioById,
     crearUsuario,
     loginUsuario,
     actualizarUsuario,
-    actualizarPassword
+    actualizarPassword,
+    renewToken
 }
