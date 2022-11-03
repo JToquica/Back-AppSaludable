@@ -22,7 +22,7 @@ app.use('/api/parametro',require('./Routes/parametro'))
 app.use('/api/tipoParametro',require('./Routes/tipoParametro'))
 
 app.listen(process.env.PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${process.env.Port}`);
+    console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
 });
 
 module.exports = app
