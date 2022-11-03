@@ -21,7 +21,7 @@ app.use('/api/riesgo',require('./Routes/riesgo'))
 app.use('/api/parametro',require('./Routes/parametro'))
 app.use('/api/tipoParametro',require('./Routes/tipoParametro'))
 
-app.listen(process.env.Port, () => {
+app.listen(process.env.PORT, () => {
     console.log(`Servidor corriendo en el puerto ${process.env.Port}`);
 });
 
