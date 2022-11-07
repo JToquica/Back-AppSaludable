@@ -81,7 +81,10 @@ const UsuarioSchema = Schema({
         required: true,
         default: '632f2dd26f8c814317209cb6'
     },
-
+    isCompleteData: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 UsuarioSchema.method('toJSON', function() {

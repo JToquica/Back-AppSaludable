@@ -1,6 +1,25 @@
-const { response } =require('express');
+const { response } = require('express');
 
 const Parametro = require('../models/Parametro');
+
+const obtenerParametroPorTipo = async (req, resp = response) => {
+    try {
+        const idTipoParametro = req.params.id;
+        const records = await Parametro.find().populate({path:'idTipoParametro', match: {id: idTipoParametro}});
+        const parametros = records.filter(parametro => parametro.idTipoParametro) 
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de parametros',
+            parametros
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al listar parametros',
+        })
+    }
+}
 
 const obtenerParametros = async (req, resp = response) => {
     try {
@@ -69,5 +88,6 @@ const actulizarParametro = async (req, resp = response) => {
 module.exports = {
     obtenerParametros,
     crearParametro,
-    actulizarParametro
+    actulizarParametro,
+    obtenerParametroPorTipo
 }
