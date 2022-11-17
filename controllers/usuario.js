@@ -152,7 +152,6 @@ const actualizarPassword = async (req, resp = response) => {
 }
 
 const renewToken = async(req,res = response) => {
-
     const usuario = await Usuario.findById(req.usuario.id).populate('rol');
 
     if (!usuario) {

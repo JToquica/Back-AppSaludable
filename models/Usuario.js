@@ -60,6 +60,10 @@ const UsuarioSchema = Schema({
         habito:{
             type: Schema.Types.ObjectId,
             ref: 'parametro',
+        },
+        puntaje: {
+            type: Number,
+            required: true
         }
     }],
     resultadosExamenes:[{
