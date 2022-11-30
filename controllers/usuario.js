@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/generar-jwt');
+const Parametro = require('../models/Parametro');
 
 const getUsuarioById = async (req, resp = response) => {
     try {
@@ -56,7 +57,6 @@ const crearUsuario = async (req, resp = response) => {
 }
 
 const loginUsuario = async (req, resp = response) => {
-
     try {
         const { email, password } = req.body;
 
@@ -97,11 +97,9 @@ const loginUsuario = async (req, resp = response) => {
 }
 
 const actualizarUsuario = async (req, resp = response) => {
-
-    const usuarioId = req.params.id;
-
     try {
-        
+        const usuarioId = req.params.id;
+        const data = req.body;
         const usuario = await Usuario.findById(usuarioId);
 
         if(!usuario) {
@@ -110,13 +108,54 @@ const actualizarUsuario = async (req, resp = response) => {
                 msg: 'El id no corresponde a un ningun usuario',
             });
         }
-        const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, req.body, {new: true});
 
-        return resp.status(200).json({
-            ok: true,
-            msg: 'Usuario actualizado',
-            usuario: usuarioActualizado
-        });
+        antecedentesFamiliares = await Promise.all(
+            data.antecedentesFamiliares.map(async (antecedente) => {
+                resp = await Parametro.findById(antecedente)
+                return resp;
+            })
+        );
+
+        enfermedadesUsuario = await Promise.all(
+            data.enfermedadesUsuario.map(async (enfermedad) => {
+                resp = await Parametro.findById(enfermedad)
+                return resp;
+            })
+        );
+
+        console.log(antecedentesFamiliares);
+        console.log(enfermedadesUsuario);
+        
+
+        valorRiesgoAntecedentesFamiliares = antecedentesFamiliares.reduce((acumulador,valor) => acumulador + valor.valorRiesgo,0);
+        console.log(valorRiesgoAntecedentesFamiliares);
+        
+        valorRiesgoEnfermedadesUsuario = enfermedadesUsuario.reduce((acumulador,valor) => acumulador + valor.valorRiesgo,0);
+        console.log(valorRiesgoEnfermedadesUsuario);
+
+        valorRiesgoHabitos = data.habitosVida.reduce((acumulador,valor) => acumulador + valor.puntaje,0);
+        console.log(valorRiesgoHabitos);
+
+        valorRiesgo = valorRiesgoAntecedentesFamiliares + valorRiesgoEnfermedadesUsuario + valorRiesgoHabitos;
+        console.log(valorRiesgo);
+
+        usuario.antecedentesFamiliares = data.antecedentesFamiliares;
+        usuario.enfermedadesUsuario = data.enfermedadesUsuario;
+        usuario.habitosVida = data.habitosVida;
+
+        console.log(usuarioId);
+        console.log(data);
+        console.log(usuario);
+
+        
+
+        // const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, req.body, {new: true});
+
+        // return resp.status(200).json({
+        //     ok: true,
+        //     msg: 'Usuario actualizado',
+        //     usuario: usuarioActualizado
+        // });
         
     } catch (error) {
         console.log(error);

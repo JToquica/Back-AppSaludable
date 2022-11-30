@@ -5,11 +5,9 @@ const Parametro = require('../models/Parametro');
 const obtenerParametroPorTipo = async (req, resp = response) => {
     try {
         const idTipoParametro = req.params.id;
-        console.log("IdTipoParametro:",idTipoParametro);
         const records = await Parametro.find().populate({path:'idTipoParametro', match: {_id: idTipoParametro}});
-        console.log("records:",records);
         const parametros = records.filter(parametro => parametro.idTipoParametro)
-        console.log("parametros:",parametros);
+
         resp.status(200).json({
             ok: true,
             msg: 'Lista de parametros',
