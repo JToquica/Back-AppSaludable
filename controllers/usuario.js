@@ -1,9 +1,10 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
 
+const Riesgo = require('../models/Riesgo');
 const Usuario = require('../models/Usuario');
-const { generarJWT } = require('../helpers/generar-jwt');
 const Parametro = require('../models/Parametro');
+const { generarJWT } = require('../helpers/generar-jwt');
 
 const getUsuarioById = async (req, resp = response) => {
     try {
@@ -123,31 +124,27 @@ const actualizarUsuario = async (req, resp = response) => {
             })
         );
 
-        console.log(antecedentesFamiliares);
-        console.log(enfermedadesUsuario);
-        
-
         valorRiesgoAntecedentesFamiliares = antecedentesFamiliares.reduce((acumulador,valor) => acumulador + valor.valorRiesgo,0);
-        console.log(valorRiesgoAntecedentesFamiliares);
-        
         valorRiesgoEnfermedadesUsuario = enfermedadesUsuario.reduce((acumulador,valor) => acumulador + valor.valorRiesgo,0);
-        console.log(valorRiesgoEnfermedadesUsuario);
-
         valorRiesgoHabitos = data.habitosVida.reduce((acumulador,valor) => acumulador + valor.puntaje,0);
-        console.log(valorRiesgoHabitos);
 
-        valorRiesgo = valorRiesgoAntecedentesFamiliares + valorRiesgoEnfermedadesUsuario + valorRiesgoHabitos;
-        console.log(valorRiesgo);
+        let valorRiesgo = valorRiesgoAntecedentesFamiliares + valorRiesgoEnfermedadesUsuario + valorRiesgoHabitos;
+
+        const riesgos = await Riesgo.find();
+
+        var tipoRiesgo = "";
+        riesgos.forEach((riesgo) => {
+            if (valorRiesgo > riesgo.rangoMinimo && valorRiesgo <= riesgo.rangoMaximo) {
+                tipoRiesgo = riesgo.id;
+            }
+        });
 
         usuario.antecedentesFamiliares = data.antecedentesFamiliares;
         usuario.enfermedadesUsuario = data.enfermedadesUsuario;
         usuario.habitosVida = data.habitosVida;
 
-        console.log(usuarioId);
         console.log(data);
         console.log(usuario);
-
-        
 
         // const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, req.body, {new: true});
 
