@@ -61,7 +61,13 @@ const loginUsuario = async (req, resp = response) => {
     try {
         const { email, password } = req.body;
 
-        let usuario = await Usuario.findOne({ email }).populate('rol');
+        let usuario = await Usuario.findOne({ email })
+            .populate(['rol', 'tipoRiesgo', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
+            'enfermedadesUsuario'])
+            .populate({
+                path: 'habitosVida.habito',
+                model: 'parametro'
+            });
 
         if (!usuario){
             return resp.status(201).json({
@@ -101,7 +107,7 @@ const actualizarUsuario = async (req, resp = response) => {
     try {
         const usuarioId = req.params.id;
         const data = req.body;
-        const usuario = await Usuario.findById(usuarioId);
+        let usuario = await Usuario.findById(usuarioId);
 
         if(!usuario) {
             return resp.status(201).json({
@@ -112,15 +118,15 @@ const actualizarUsuario = async (req, resp = response) => {
 
         antecedentesFamiliares = await Promise.all(
             data.antecedentesFamiliares.map(async (antecedente) => {
-                resp = await Parametro.findById(antecedente)
-                return resp;
+                result = await Parametro.findById(antecedente)
+                return result;
             })
         );
 
         enfermedadesUsuario = await Promise.all(
             data.enfermedadesUsuario.map(async (enfermedad) => {
-                resp = await Parametro.findById(enfermedad)
-                return resp;
+                result = await Parametro.findById(enfermedad)
+                return result;
             })
         );
 
@@ -139,26 +145,43 @@ const actualizarUsuario = async (req, resp = response) => {
             }
         });
 
+        usuario.edad = data.edad;
+        usuario.sexo = data.sexo;
+        usuario.fechaNacimiento = data.fechaNacimiento;
+        usuario.paisResidencia = data.paisResidencia;
+        usuario.paisOrigen = data.paisOrigen;
+        usuario.peso = data.peso;
+        usuario.altura = data.altura;
+        usuario.imc = data.imc;
         usuario.antecedentesFamiliares = data.antecedentesFamiliares;
         usuario.enfermedadesUsuario = data.enfermedadesUsuario;
         usuario.habitosVida = data.habitosVida;
+        usuario.riesgoUsuario = valorRiesgo;
+        usuario.tipoRiesgo = tipoRiesgo;
+        usuario.isCompleteData = true;
 
-        console.log(data);
-        console.log(usuario);
+        await Usuario.findByIdAndUpdate(usuarioId, usuario, {new: true});
+        
+        usuario = await Usuario.findById(usuarioId).populate(['rol', 'tipoRiesgo', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
+        'enfermedadesUsuario'])
+        .populate({
+            path: 'habitosVida.habito',
+            model: 'parametro'
+        });
 
-        // const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, req.body, {new: true});
+        const token = await generarJWT(usuario.id);
 
-        // return resp.status(200).json({
-        //     ok: true,
-        //     msg: 'Usuario actualizado',
-        //     usuario: usuarioActualizado
-        // });
+        return resp.status(200).json({
+            ok: true,
+            usuario,
+            token
+        });
         
     } catch (error) {
         console.log(error);
         return resp.status(400).json({
             ok: false,
-            msg: 'Error al actualizar usuario',
+            msg: 'Error al actualizar usuario'
         });
     }
 }
@@ -188,7 +211,13 @@ const actualizarPassword = async (req, resp = response) => {
 }
 
 const renewToken = async(req,res = response) => {
-    const usuario = await Usuario.findById(req.usuario.id).populate('rol');
+    const usuario = await Usuario.findById(req.usuario.id)
+        .populate(['rol', 'tipoRiesgo', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
+        'enfermedadesUsuario'])
+        .populate({
+            path: 'habitosVida.habito',
+            model: 'parametro'
+        });
 
     if (!usuario) {
         return res.status(404).json({
