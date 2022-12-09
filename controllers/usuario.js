@@ -62,11 +62,19 @@ const loginUsuario = async (req, resp = response) => {
         const { email, password } = req.body;
 
         let usuario = await Usuario.findOne({ email })
-            .populate(['rol', 'tipoRiesgo', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
+            .populate(['rol', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
             'enfermedadesUsuario'])
             .populate({
                 path: 'habitosVida.habito',
                 model: 'parametro'
+            })
+            .populate({
+                path: 'tipoRiesgo',
+                model: 'riesgo',
+                populate: {
+                    path: 'recomendaciones.recomendacion',
+                    model: 'recomendacion'
+                }
             });
 
         if (!usuario){
@@ -162,11 +170,20 @@ const actualizarUsuario = async (req, resp = response) => {
 
         await Usuario.findByIdAndUpdate(usuarioId, usuario, {new: true});
         
-        usuario = await Usuario.findById(usuarioId).populate(['rol', 'tipoRiesgo', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
+        usuario = await Usuario.findById(usuarioId)
+        .populate(['rol', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
         'enfermedadesUsuario'])
         .populate({
             path: 'habitosVida.habito',
             model: 'parametro'
+        })
+        .populate({
+            path: 'tipoRiesgo',
+            model: 'riesgo',
+            populate: {
+                path: 'recomendaciones.recomendacion',
+                model: 'recomendacion'
+            }
         });
 
         const token = await generarJWT(usuario.id);
@@ -212,11 +229,19 @@ const actualizarPassword = async (req, resp = response) => {
 
 const renewToken = async(req,res = response) => {
     const usuario = await Usuario.findById(req.usuario.id)
-        .populate(['rol', 'tipoRiesgo', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
+        .populate(['rol', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
         'enfermedadesUsuario'])
         .populate({
             path: 'habitosVida.habito',
             model: 'parametro'
+        })
+        .populate({
+            path: 'tipoRiesgo',
+            model: 'riesgo',
+            populate: {
+                path: 'recomendaciones.recomendacion',
+                model: 'recomendacion'
+            }
         });
 
     if (!usuario) {
