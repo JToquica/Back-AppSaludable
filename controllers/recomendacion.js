@@ -1,6 +1,39 @@
 const { response } = require('express');
 
 const Recomendacion = require('../models/Recomendacion');
+const Usuario = require('../models/Usuario');
+
+
+const recomendacionesPorEnfermedad = async (req, resp = response) => {
+    try {
+        const id = req.params.id 
+
+        const listRecomendaciones = await Recomendacion.find({idTipoRecomendacion: "633218cd05abbcd8122d35ad"})
+        .populate('idTipoRecomendacion')
+        .populate('idParametro');
+
+        const usuario = await Usuario.findById(id).populate("enfermedadesUsuario");
+
+        enfermedadesUsuario = usuario.enfermedadesUsuario;
+
+        var recomendaciones = {};
+        enfermedadesUsuario.map((enfermedad) => {
+            recomendaciones[enfermedad.nombre] = listRecomendaciones.filter((recomendacion) => recomendacion.idParametro._id.equals(enfermedad._id));
+        });
+
+        resp.status(200).json({
+            ok: true,
+            msg: 'Lista de recomendaciones',
+            recomendaciones: recomendaciones
+        });
+    } catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error al listar recomendaciones'
+        })
+    }
+}
 
 const obtenerRecomendacion = async (req, resp = response) => {
     try {
@@ -70,6 +103,6 @@ const actulizarRecomendacion = async (req, resp = response) => {
 module.exports = {
     obtenerRecomendacion,
     crearRecomendacion,
-    actulizarRecomendacion
-
+    actulizarRecomendacion,
+    recomendacionesPorEnfermedad
 }

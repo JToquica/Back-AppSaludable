@@ -6,11 +6,12 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { AdminRole } = require('../middlewares/validar-roles');
 
-const { obtenerRecomendacion, crearRecomendacion, actulizarRecomendacion } = require('../controllers/recomendacion');
+const { obtenerRecomendacion, crearRecomendacion, actulizarRecomendacion, recomendacionesPorEnfermedad } = require('../controllers/recomendacion');
 
 
 router.get('/', validarJWT, obtenerRecomendacion);
 
+router.get('/usuario/:id', validarJWT, recomendacionesPorEnfermedad);
 
 router.post(
     '/create',
