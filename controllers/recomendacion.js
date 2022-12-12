@@ -6,16 +6,11 @@ const Recomendacion = require('../models/Recomendacion');
 
 const recomendacionesPorSintoma = async (req, resp = response) => {
     try {
-
         const listRecomendaciones = await Recomendacion.find({idTipoRecomendacion: "633cb4feb71ce1c00491b4f5"})
         .populate('idTipoRecomendacion')
         .populate('idParametro');
 
-        console.log("Recomendaciones: ", listRecomendaciones);
-
         const sintomas = await Parametro.find({idTipoParametro: "632e694a7bab36dbf8f79e4f"}).populate("idTipoParametro");
-
-        console.log("Sintomas: ", sintomas);
 
         var recomendaciones = {};
         sintomas.map((sintoma) => {

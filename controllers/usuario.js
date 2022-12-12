@@ -43,6 +43,9 @@ const crearUsuario = async (req, resp = response) => {
 
         await usuario.save();
 
+        usuario = await Usuario.findById(usuario.id).populate("rol");
+        const token = await generarJWT(usuario.id);
+
         return resp.status(200).json({
             ok: true,
             usuario,
@@ -169,7 +172,7 @@ const actualizarUsuario = async (req, resp = response) => {
         usuario.isCompleteData = true;
 
         await Usuario.findByIdAndUpdate(usuarioId, usuario, {new: true});
-        
+
         usuario = await Usuario.findById(usuarioId)
         .populate(['rol', 'paisResidencia', 'paisOrigen', 'antecedentesFamiliares', 
         'enfermedadesUsuario'])
@@ -193,7 +196,6 @@ const actualizarUsuario = async (req, resp = response) => {
             usuario,
             token
         });
-        
     } catch (error) {
         console.log(error);
         return resp.status(400).json({
