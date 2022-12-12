@@ -45,28 +45,26 @@ const UsuarioSchema = Schema({
         required: true
     },
     antecedentesFamiliares:[{
-        enfermedad:{
-            type: Schema.Types.ObjectId,
-            ref: 'parametro',
-        }
+        type: Schema.Types.ObjectId,
+        ref: 'parametro',
     }],
     enfermedadesUsuario:[{
-        enfermedad:{
-            type: Schema.Types.ObjectId,
-            ref: 'parametro',
-        }
+        type: Schema.Types.ObjectId,
+        ref: 'parametro',
     }],
     habitosVida:[{
-        habito:{
+        habito: {
             type: Schema.Types.ObjectId,
             ref: 'parametro',
+        },
+        puntaje: {
+            type: Number,
+            required: true
         }
     }],
     resultadosExamenes:[{
-        resultadoExamen:{
-            type: Schema.Types.ObjectId,
-            ref: 'resultadoExamen',
-        }
+        type: Schema.Types.ObjectId,
+        ref: 'resultadoExamen',
     }],
     riesgoUsuario:{
         type: Number,
@@ -81,7 +79,10 @@ const UsuarioSchema = Schema({
         required: true,
         default: '632f2dd26f8c814317209cb6'
     },
-
+    isCompleteData: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 UsuarioSchema.method('toJSON', function() {

@@ -3,9 +3,14 @@ const { Schema, model } = require('mongoose');
 const RiesgoSchema = Schema({
     nombre:{
         type: String,
+        required: true,
+        unique: true
+    },
+    rangoMinimo:{
+        type: Number,
         required: true
     },
-    puntaje:{
+    rangoMaximo:{
         type: Number,
         required: true
     },

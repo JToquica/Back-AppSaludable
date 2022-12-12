@@ -6,12 +6,12 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { AdminRole } = require('../middlewares/validar-roles');
 
-const { obtenerRecomendacion, crearRecomendacion, actulizarRecomendacion } = require('../controllers/recomendacion');
-const { ChainCondition } = require('express-validator/src/context-items');
+const { obtenerRecomendacion, crearRecomendacion, actulizarRecomendacion, recomendacionesPorEnfermedad, recomendacionesPorSintoma } = require('../controllers/recomendacion');
 
 
 router.get('/', validarJWT, obtenerRecomendacion);
-
+router.get('/sintomas', recomendacionesPorSintoma);
+router.get('/usuario/:id', validarJWT, recomendacionesPorEnfermedad);
 
 router.post(
     '/create',
@@ -20,7 +20,7 @@ router.post(
         //check('idParametro','El parametro es ogligatorio').not().isEmpty(),
         check('nombre','El nombre de la recomendacion es obligatorio').not().isEmpty().trim(),
         check('recomendacion','La recomendacion es obligatoria').not().isEmpty().trim(),
-        check('puntaje', 'El puntaje de la recomendacion es obligtatoria').not().isEmpty().isLength({max: 3}),
+        check('prioridad', 'La prioridad de la recomendacion es obligtatoria').not().isEmpty().isLength({max: 3}),
     ],
     validarCampos,
     validarJWT,
@@ -34,7 +34,7 @@ router.put(
         //check('idParametro','El parametro es ogligatorio').not().isEmpty(),
         check('nombre','El nombre de la recomendacion es obligatorio').not().isEmpty().trim(),
         check('recomendacion','La recomendacion es obligatoria').not().isEmpty().trim(),
-        check('puntaje', 'El puntaje de la recomendacion es obligtatoria').not().isEmpty().isLength({max: 3}),
+        check('prioridad', 'La prioridad de la recomendacion es obligtatoria').not().isEmpty().isLength({max: 3}),
     ],
     validarCampos,
     validarJWT,

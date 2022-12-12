@@ -1,25 +1,25 @@
 const { Schema, model } = require('mongoose');
 
 const RecomendacionSchema = Schema({
-    idTipoRecomendacion:{
+    idTipoRecomendacion: {
         type: Schema.Types.ObjectId,
         ref: 'tipoRecomendacion',
         required: true
     },
-    idParametro:{
+    idParametro: {
         type: Schema.Types.ObjectId,
         ref: 'parametro',
         required: true
     },
-    nombre:{
+    nombre: {
         type: String,
         required: true
     },
-    recomendacion:{
+    recomendacion: {
         type: String,
         required: true
     },
-    puntaje:{
+    prioridad: {
         type: Number,
         required: true
     }

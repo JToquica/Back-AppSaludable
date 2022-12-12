@@ -14,7 +14,8 @@ router.get('/', obtenerRiesgos);
 router.post('/create',
     [
         check('nombre','El nombre del riesgo es obligatorio').not().isEmpty(),
-        check('puntaje','El puntaje del riesgo es obligatorio').not().isEmpty(),
+        check('rangoMinimo','El valor del rango minimo es obligatorio').not().isEmpty(),
+        check('rangoMaximo','El valor del rango maximo es obligatorio').not().isEmpty(),
     ],
     validarCampos,
     validarJWT,
@@ -26,7 +27,8 @@ router.put(
     '/update/:id',
     [
         check('nombre','El nombre del riesgo es obligatorio').not().isEmpty(),
-        check('puntaje','El puntaje del riesgo es obligatorio').not().isEmpty(),
+        check('rangoMinimo','El valor del rango minimo es obligatorio').not().isEmpty(),
+        check('rangoMaximo','El valor del rango maximo es obligatorio').not().isEmpty(),
     ],
     validarCampos,
     validarJWT,
