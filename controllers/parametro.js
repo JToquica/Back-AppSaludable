@@ -42,12 +42,14 @@ const obtenerParametros = async (req, resp = response) => {
 const crearParametro = async (req, resp = response) => {
     try {
         const parametro = new Parametro(req.body);
-        const parametroSave = await parametro.save();
+        await parametro.save();
 
-        resp.status(201).json({
+        const parametros = await Parametro.find().populate('idTipoParametro');
+
+        resp.status(200).json({
             ok: true,
             msg: 'Parametro creado de manera exitosa',
-            parametroSave
+            parametros
         });
     } catch (error) {
         console.log(error);

@@ -8,7 +8,7 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 
 const { obtenerTipoRecomendacion, crearTipoRecomendacion, actulizarTipoRecomendacion, eliminarTipoRecomendacion } = require('../controllers/tipoRecomendacion');
 
-router.get('/', validarJWT, obtenerTipoRecomendacion);
+router.get('/',obtenerTipoRecomendacion);
 
 router.post('/create',
     [

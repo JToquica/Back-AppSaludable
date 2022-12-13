@@ -4,7 +4,11 @@ const Riesgo = require('../models/Riesgo');
 
 const obtenerRiesgos = async (req, resp = response) => {
     try {
-        const riesgos = await Riesgo.find();
+        const riesgos = await Riesgo.find().populate({
+            path: 'recomendaciones.recomendacion',
+            model: 'recomendacion'
+        });
+
         resp.status(200).json({
             ok: true,
             msg: 'Lista de riesgos',
