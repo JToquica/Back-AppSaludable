@@ -1,6 +1,7 @@
 const { response } = require('express');
 
 const Parametro = require('../models/Parametro');
+const Riesgo = require('../models/Riesgo');
 
 const obtenerParametroPorTipo = async (req, resp = response) => {
     try {
@@ -46,11 +47,35 @@ const crearParametro = async (req, resp = response) => {
 
         const parametros = await Parametro.find().populate('idTipoParametro');
 
+        if ( req.body.idTipoParametro != "632e694a7bab36dbf8f79e4f") {
+            const enfermedades = parametros.filter((parametro) => parametro.idTipoParametro.nombre == "Enfermedad");
+            const habitos = parametros.filter((parametro) => parametro.idTipoParametro.nombre == "Habito");
+
+            sumatoriaEnfermedades = enfermedades.reduce((acumulador,valor) => acumulador + valor.valorRiesgo,0);
+
+            habitosPositivo = habitos.filter((habito) => habito.valorRiesgo > 0);
+            habitosNegativo = habitos.filter((habito) => habito.valorRiesgo < 0);
+
+            habitosSuman = habitosPositivo.reduce((acumulador,valor) => acumulador + valor.valorRiesgo,0);
+            habitosRestan = habitosNegativo.reduce((acumulador,valor) => acumulador + valor.valorRiesgo,0);
+
+            let max = (sumatoriaEnfermedades * 2) + (habitosSuman * 3) + 1;
+            let min = (habitosRestan * 3) - 1;
+
+            divisor = max / 3;
+            divisorPor2 = divisor * 2; 
+
+            await Riesgo.findByIdAndUpdate("632e7731fcd6235d4451dd19", {rangoMinimo: min, rangoMaximo: divisor});
+            await Riesgo.findByIdAndUpdate("633cc0c1296b83b04d237505", {rangoMinimo: divisor, rangoMaximo: divisorPor2});
+            await Riesgo.findByIdAndUpdate("635dc5a6c0753da44da9c3b7", {rangoMinimo: divisorPor2, rangoMaximo: max});
+        }
+
         resp.status(200).json({
             ok: true,
             msg: 'Parametro creado de manera exitosa',
             parametros
         });
+        
     } catch (error) {
         console.log(error);
         resp.status(500).json({
