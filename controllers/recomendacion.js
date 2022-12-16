@@ -64,12 +64,13 @@ const recomendacionesPorEnfermedad = async (req, resp = response) => {
 
 const obtenerRecomendacion = async (req, resp = response) => {
     try {
-        const recomendacion = await Recomendacion.find().populate('idTipoRecomendacion')
+        const recomendaciones = await Recomendacion.find().populate('idTipoRecomendacion')
                                                         .populate('idParametro');
-        resp.status(201).json({
+                                                        
+        resp.status(200).json({
             ok: true,
             msg: 'Lista de recomendaciones',
-            recomendacion
+            recomendaciones
         });
     } catch (error) {
         console.log(error);
