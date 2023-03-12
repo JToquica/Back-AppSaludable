@@ -11,10 +11,6 @@ const RecomendacionSchema = Schema({
         ref: 'parametro',
         required: true
     },
-    nombre: {
-        type: String,
-        required: true
-    },
     recomendacion: {
         type: String,
         required: true

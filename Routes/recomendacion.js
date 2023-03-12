@@ -6,7 +6,7 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { AdminRole } = require('../middlewares/validar-roles');
 
-const { obtenerRecomendacion, crearRecomendacion, actulizarRecomendacion, recomendacionesPorEnfermedad, recomendacionesPorSintoma } = require('../controllers/recomendacion');
+const { obtenerRecomendacion, crearRecomendacion, actualizarRecomendacion, recomendacionesPorEnfermedad, recomendacionesPorSintoma, eliminarRecomendacion } = require('../controllers/recomendacion');
 
 
 router.get('/', obtenerRecomendacion);
@@ -17,8 +17,6 @@ router.post(
     '/create',
     [
         check('idTipoRecomendacion','El tipo recomendacion es obligatorio').not().isEmpty(),
-        //check('idParametro','El parametro es ogligatorio').not().isEmpty(),
-        check('nombre','El nombre de la recomendacion es obligatorio').not().isEmpty().trim(),
         check('recomendacion','La recomendacion es obligatoria').not().isEmpty().trim(),
         check('prioridad', 'La prioridad de la recomendacion es obligtatoria').not().isEmpty().isLength({max: 3}),
     ],
@@ -31,15 +29,20 @@ router.put(
     '/update/:id',
     [
         check('idTipoRecomendacion','El tipo recomendacion es obligatorio').not().isEmpty(),
-        //check('idParametro','El parametro es ogligatorio').not().isEmpty(),
-        check('nombre','El nombre de la recomendacion es obligatorio').not().isEmpty().trim(),
         check('recomendacion','La recomendacion es obligatoria').not().isEmpty().trim(),
         check('prioridad', 'La prioridad de la recomendacion es obligtatoria').not().isEmpty().isLength({max: 3}),
     ],
     validarCampos,
     validarJWT,
     AdminRole,
-    actulizarRecomendacion
+    actualizarRecomendacion
+);
+
+router.delete(
+    '/delete/:id',
+    validarJWT,
+    AdminRole,
+    eliminarRecomendacion
 );
 
 module.exports = router;
