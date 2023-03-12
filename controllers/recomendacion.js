@@ -83,13 +83,17 @@ const obtenerRecomendacion = async (req, resp = response) => {
 
 const crearRecomendacion = async (req, resp = response) => {
     try {
+        console.log(req.body);
         const recomendacion = new Recomendacion(req.body);
-        const recomendacionSave = await recomendacion.save();
+        await recomendacion.save();
 
-        resp.status(201).json({
+        const recomendaciones = await Recomendacion.find().populate('idTipoRecomendacion')
+                                                        .populate('idParametro');
+
+        resp.status(200).json({
             ok:true,
             msg: 'Recomendacion creada con exito',
-            recomendacionSave
+            recomendaciones
         });
     } catch (error) {
         console.log(error);
@@ -100,10 +104,9 @@ const crearRecomendacion = async (req, resp = response) => {
     }
 }
 
-const actulizarRecomendacion = async (req, resp = response) => {
-    const recomendacionId = req.params.id;
-
+const actualizarRecomendacion = async (req, resp = response) => {
     try {
+        const recomendacionId = req.params.id;
         const recomendacion = await Recomendacion.findById(recomendacionId);
 
         if(!recomendacion){
@@ -112,12 +115,15 @@ const actulizarRecomendacion = async (req, resp = response) => {
                 msg: 'El id no corresponde a un ninguna recomendacion',
             });
         }
-        const recomendacionActualizado = await Recomendacion.findByIdAndUpdate(recomendacionId, req.body, {new: true});
+
+        await Recomendacion.findByIdAndUpdate(recomendacionId, req.body, {new: true});
+        const recomendaciones = await Recomendacion.find().populate('idTipoRecomendacion')
+                                                        .populate('idParametro');
 
         return resp.status(200).json({
             ok: true,
-            msg: 'Recomendacion actualizado',
-            parametro: recomendacionActualizado
+            msg: 'Recomendacion actualizada',
+            recomendaciones
         });
     } catch (error) {
         console.log(error);
@@ -128,10 +134,41 @@ const actulizarRecomendacion = async (req, resp = response) => {
     }
 }
 
+const eliminarRecomendacion = async (req, resp = response) => {
+    try {
+        const recomendacionId = req.params.id;
+        const recomendacion = await Recomendacion.findById(recomendacionId);
+
+        if(!recomendacion){
+            return resp.status(200).json({
+                ok: false,
+                msg: 'El id no corresponde a un ninguna recomendación',
+            });
+        }
+
+        await Recomendacion.findByIdAndDelete(recomendacionId);
+        const recomendaciones = await Recomendacion.find().populate('idTipoRecomendacion')
+                                                        .populate('idParametro');
+
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Recomendación eliminada',
+            recomendaciones
+        });
+    } catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Error al eliminar la recomendación',
+        });
+    }
+}
+
 module.exports = {
     crearRecomendacion,
     obtenerRecomendacion,
-    actulizarRecomendacion,
+    actualizarRecomendacion,
+    eliminarRecomendacion,
     recomendacionesPorSintoma,
     recomendacionesPorEnfermedad
 }

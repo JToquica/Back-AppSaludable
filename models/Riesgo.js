@@ -15,10 +15,8 @@ const RiesgoSchema = Schema({
         required: true
     },
     recomendaciones:[{
-        recomendacion:{
-            type: Schema.Types.ObjectId,
-            ref: 'recomendacion',
-        }
+        type: String,
+        required: true
     }],
 });
 

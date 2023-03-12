@@ -4,10 +4,7 @@ const Riesgo = require('../models/Riesgo');
 
 const obtenerRiesgos = async (req, resp = response) => {
     try {
-        const riesgos = await Riesgo.find().populate({
-            path: 'recomendaciones.recomendacion',
-            model: 'recomendacion'
-        });
+        const riesgos = await Riesgo.find();
 
         resp.status(200).json({
             ok: true,
@@ -55,11 +52,12 @@ const actualizarRiesgo = async (req, resp = response) => {
             });
         }
         const riesgoActualizado = await Riesgo.findByIdAndUpdate(riesgoId, req.body, {new: true});
+        const riesgos = await Riesgo.find();
 
         return resp.status(201).json({
             ok: true,
             msg: 'Riesgo actualizado',
-            riesgo: riesgoActualizado
+            riesgos
         });  
     } catch (error) {
         console.log(error);
